@@ -12,6 +12,8 @@
 		2E2124A62C79CBA100E55062 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E2124A52C79CBA100E55062 /* Assets.xcassets */; };
 		2E2124A92C79CBA100E55062 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E2124A82C79CBA100E55062 /* Preview Assets.xcassets */; };
 		2E2124B12C79FBB500E55062 /* FrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B02C79FBB500E55062 /* FrameView.swift */; };
+		2E2124B52C79FE6900E55062 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B42C79FE6900E55062 /* CameraManager.swift */; };
+		2E2124B72C79FFB300E55062 /* CameraError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B62C79FFB300E55062 /* CameraError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		2E2124A82C79CBA100E55062 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2E2124AF2C79D17900E55062 /* -D-Face-Detection-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "-D-Face-Detection-Info.plist"; sourceTree = SOURCE_ROOT; };
 		2E2124B02C79FBB500E55062 /* FrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameView.swift; sourceTree = "<group>"; };
+		2E2124B42C79FE6900E55062 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		2E2124B62C79FFB300E55062 /* CameraError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,7 @@
 			children = (
 				2E2124AF2C79D17900E55062 /* -D-Face-Detection-Info.plist */,
 				2E2124A12C79CB9F00E55062 /* FaceDetectionApp.swift */,
+				2E2124B32C79FE5600E55062 /* Camera */,
 				2E2124B22C79FE3900E55062 /* Views */,
 				2E2124A52C79CBA100E55062 /* Assets.xcassets */,
 				2E2124A72C79CBA100E55062 /* Preview Content */,
@@ -78,6 +83,15 @@
 				2E2124B02C79FBB500E55062 /* FrameView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		2E2124B32C79FE5600E55062 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				2E2124B62C79FFB300E55062 /* CameraError.swift */,
+				2E2124B42C79FE6900E55062 /* CameraManager.swift */,
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -151,7 +165,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E2124B12C79FBB500E55062 /* FrameView.swift in Sources */,
+				2E2124B72C79FFB300E55062 /* CameraError.swift in Sources */,
 				2E2124A42C79CB9F00E55062 /* ContentView.swift in Sources */,
+				2E2124B52C79FE6900E55062 /* CameraManager.swift in Sources */,
 				2E2124A22C79CB9F00E55062 /* FaceDetectionApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -290,6 +306,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "-D-Face-Detection-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to do real 3D face detection.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -323,6 +340,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "-D-Face-Detection-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to do real 3D face detection.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
