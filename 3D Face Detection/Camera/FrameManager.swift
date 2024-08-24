@@ -8,8 +8,8 @@
 import AVFoundation
 
 final class FrameManager: NSObject, ObservableObject {
-  static let shared = FileManager()
-  
+  static let shared = FrameManager()
+
   @Published var current: CVPixelBuffer?
   
   let videoOutputQueue = DispatchQueue(
