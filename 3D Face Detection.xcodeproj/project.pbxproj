@@ -56,8 +56,7 @@
 			children = (
 				2E2124AF2C79D17900E55062 /* -D-Face-Detection-Info.plist */,
 				2E2124A12C79CB9F00E55062 /* FaceDetectionApp.swift */,
-				2E2124A32C79CB9F00E55062 /* ContentView.swift */,
-				2E2124B02C79FBB500E55062 /* FrameView.swift */,
+				2E2124B22C79FE3900E55062 /* Views */,
 				2E2124A52C79CBA100E55062 /* Assets.xcassets */,
 				2E2124A72C79CBA100E55062 /* Preview Content */,
 			);
@@ -70,6 +69,15 @@
 				2E2124A82C79CBA100E55062 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		2E2124B22C79FE3900E55062 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2E2124A32C79CB9F00E55062 /* ContentView.swift */,
+				2E2124B02C79FBB500E55062 /* FrameView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
