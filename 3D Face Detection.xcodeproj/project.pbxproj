@@ -14,6 +14,7 @@
 		2E2124B12C79FBB500E55062 /* FrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B02C79FBB500E55062 /* FrameView.swift */; };
 		2E2124B52C79FE6900E55062 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B42C79FE6900E55062 /* CameraManager.swift */; };
 		2E2124B72C79FFB300E55062 /* CameraError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B62C79FFB300E55062 /* CameraError.swift */; };
+		2E2124B92C7A0BF300E55062 /* FrameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B82C7A0BF300E55062 /* FrameManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		2E2124B02C79FBB500E55062 /* FrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameView.swift; sourceTree = "<group>"; };
 		2E2124B42C79FE6900E55062 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		2E2124B62C79FFB300E55062 /* CameraError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraError.swift; sourceTree = "<group>"; };
+		2E2124B82C7A0BF300E55062 /* FrameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 			children = (
 				2E2124B62C79FFB300E55062 /* CameraError.swift */,
 				2E2124B42C79FE6900E55062 /* CameraManager.swift */,
+				2E2124B82C7A0BF300E55062 /* FrameManager.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -165,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E2124B12C79FBB500E55062 /* FrameView.swift in Sources */,
+				2E2124B92C7A0BF300E55062 /* FrameManager.swift in Sources */,
 				2E2124B72C79FFB300E55062 /* CameraError.swift in Sources */,
 				2E2124A42C79CB9F00E55062 /* ContentView.swift in Sources */,
 				2E2124B52C79FE6900E55062 /* CameraManager.swift in Sources */,
