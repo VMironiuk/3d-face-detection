@@ -11,8 +11,12 @@ struct ContentView: View {
   @StateObject private var viewModel = ContentViewModel()
   
   var body: some View {
-    FrameView(image: viewModel.frame)
-      .ignoresSafeArea()
+    ZStack {
+      FrameView(image: viewModel.frame)
+        .ignoresSafeArea()
+      
+      ErrorView(error: viewModel.error)
+    }
   }
 }
 

@@ -10,8 +10,10 @@ import Combine
 
 final class ContentViewModel: ObservableObject {
   @Published var frame: CGImage?
+  @Published var error: Error?
   
   private let frameManager = FrameManager.shared
+  private let cameraManager = CameraManager.shared
   private var cancellables = Set<AnyCancellable>()
   
   init() {
@@ -25,6 +27,12 @@ final class ContentViewModel: ObservableObject {
         CGImage.create(from: buffer)
       }
       .assign(to: \.frame, on: self)
+      .store(in: &cancellables)
+    
+    cameraManager.$error
+      .receive(on: RunLoop.main)
+      .map { $0 }
+      .assign(to: \.error, on: self)
       .store(in: &cancellables)
   }
 }

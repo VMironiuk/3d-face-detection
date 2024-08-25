@@ -17,6 +17,7 @@
 		2E2124B92C7A0BF300E55062 /* FrameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B82C7A0BF300E55062 /* FrameManager.swift */; };
 		2E2124BC2C7A0DE800E55062 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124BB2C7A0DE800E55062 /* ContentViewModel.swift */; };
 		2E2124BF2C7A0EB400E55062 /* CGImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124BE2C7A0EB400E55062 /* CGImage+.swift */; };
+		2ED6FEBD2C7B1A910091364E /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED6FEBC2C7B1A910091364E /* ErrorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		2E2124B82C7A0BF300E55062 /* FrameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameManager.swift; sourceTree = "<group>"; };
 		2E2124BB2C7A0DE800E55062 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		2E2124BE2C7A0EB400E55062 /* CGImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+.swift"; sourceTree = "<group>"; };
+		2ED6FEBC2C7B1A910091364E /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 			children = (
 				2E2124A32C79CB9F00E55062 /* ContentView.swift */,
 				2E2124B02C79FBB500E55062 /* FrameView.swift */,
+				2ED6FEBC2C7B1A910091364E /* ErrorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -196,6 +199,7 @@
 				2E2124BC2C7A0DE800E55062 /* ContentViewModel.swift in Sources */,
 				2E2124A42C79CB9F00E55062 /* ContentView.swift in Sources */,
 				2E2124B52C79FE6900E55062 /* CameraManager.swift in Sources */,
+				2ED6FEBD2C7B1A910091364E /* ErrorView.swift in Sources */,
 				2E2124A22C79CB9F00E55062 /* FaceDetectionApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
