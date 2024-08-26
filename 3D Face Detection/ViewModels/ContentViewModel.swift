@@ -11,6 +11,7 @@ import Combine
 final class ContentViewModel: ObservableObject {
   @Published var frame: CGImage?
   @Published var error: Error?
+  @Published var faceDetected: Bool = false
   
   private let frameManager = FrameManager.shared
   private let cameraManager = CameraManager.shared
@@ -27,6 +28,11 @@ final class ContentViewModel: ObservableObject {
         CGImage.create(from: buffer)
       }
       .assign(to: \.frame, on: self)
+      .store(in: &cancellables)
+    
+    frameManager.$faceDetected
+      .receive(on: RunLoop.main)
+      .assign(to: \.faceDetected, on: self)
       .store(in: &cancellables)
     
     cameraManager.$error

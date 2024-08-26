@@ -15,6 +15,8 @@ struct ContentView: View {
       FrameView(image: viewModel.frame)
         .ignoresSafeArea()
       
+      FaceDetectionView(faceDetected: viewModel.faceDetected)
+
       ErrorView(error: viewModel.error)
     }
   }
