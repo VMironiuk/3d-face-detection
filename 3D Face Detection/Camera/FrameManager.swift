@@ -17,6 +17,9 @@ final class FrameManager: NSObject, ObservableObject {
   
   @Published private(set) var currentFrame: CVPixelBuffer?
   @Published private(set) var isFaceDetected: Bool = false
+  @Published private(set) var innerDepth: Float32 = 0.0
+  @Published private(set) var outerDepth: Float32 = 0.0
+  @Published private(set) var depthDiff: Float32 = 0.0
   
   let videoOutputQueue = DispatchQueue(
     label: "com.vmyroniuk.VideoOutputQueue",
@@ -112,6 +115,10 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     CVPixelBufferUnlockBaseAddress(depthDataMap, .readOnly)
     
     DispatchQueue.main.async { [weak self] in
+      self?.innerDepth = innerDepthAverage
+      self?.outerDepth = outerDepthAverage
+      self?.depthDiff = innerDepthAverage - outerDepthAverage
+      
       if innerDepthAverage < 2.0
           && innerDepthAverage > 1.75
           && innerDepthAverage - outerDepthAverage > 0.7

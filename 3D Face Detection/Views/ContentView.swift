@@ -15,6 +15,12 @@ struct ContentView: View {
       FrameView(image: viewModel.frame)
         .ignoresSafeArea()
       
+      DepthInfoView(
+        innerDepth: viewModel.innerDepth,
+        outerDepth: viewModel.outerDepth,
+        depthDiff: viewModel.depthDiff
+      )
+      
       FaceDetectionView(isFaceDetected: viewModel.faceDetected)
 
       ErrorView(error: viewModel.error)

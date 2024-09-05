@@ -18,6 +18,7 @@
 		2E2124BC2C7A0DE800E55062 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124BB2C7A0DE800E55062 /* ContentViewModel.swift */; };
 		2E2124BF2C7A0EB400E55062 /* CGImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124BE2C7A0EB400E55062 /* CGImage+.swift */; };
 		2E2B4D312C7C6B0E0090EC8B /* FaceDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2B4D302C7C6B0E0090EC8B /* FaceDetectionView.swift */; };
+		2EB5F7242C89DD42009378DA /* DepthInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB5F7232C89DD42009378DA /* DepthInfoView.swift */; };
 		2ED6FEBD2C7B1A910091364E /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED6FEBC2C7B1A910091364E /* ErrorView.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,7 @@
 		2E2124BB2C7A0DE800E55062 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		2E2124BE2C7A0EB400E55062 /* CGImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+.swift"; sourceTree = "<group>"; };
 		2E2B4D302C7C6B0E0090EC8B /* FaceDetectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionView.swift; sourceTree = "<group>"; };
+		2EB5F7232C89DD42009378DA /* DepthInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthInfoView.swift; sourceTree = "<group>"; };
 		2ED6FEBC2C7B1A910091364E /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +97,7 @@
 				2E2124B02C79FBB500E55062 /* FrameView.swift */,
 				2ED6FEBC2C7B1A910091364E /* ErrorView.swift */,
 				2E2B4D302C7C6B0E0090EC8B /* FaceDetectionView.swift */,
+				2EB5F7232C89DD42009378DA /* DepthInfoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -201,6 +204,7 @@
 				2E2B4D312C7C6B0E0090EC8B /* FaceDetectionView.swift in Sources */,
 				2E2124B72C79FFB300E55062 /* CameraError.swift in Sources */,
 				2E2124BC2C7A0DE800E55062 /* ContentViewModel.swift in Sources */,
+				2EB5F7242C89DD42009378DA /* DepthInfoView.swift in Sources */,
 				2E2124A42C79CB9F00E55062 /* ContentView.swift in Sources */,
 				2E2124B52C79FE6900E55062 /* CameraManager.swift in Sources */,
 				2ED6FEBD2C7B1A910091364E /* ErrorView.swift in Sources */,

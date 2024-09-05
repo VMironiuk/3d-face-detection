@@ -9,9 +9,12 @@ import CoreImage
 import Combine
 
 final class ContentViewModel: ObservableObject {
-  @Published var frame: CGImage?
-  @Published var error: Error?
-  @Published var faceDetected: Bool = false
+  @Published private(set) var frame: CGImage?
+  @Published private(set) var error: Error?
+  @Published private(set) var faceDetected: Bool = false
+  @Published private(set) var innerDepth: Float32 = 0.0
+  @Published private(set) var outerDepth: Float32 = 0.0
+  @Published private(set) var depthDiff: Float32 = 0.0
   
   private let frameManager = FrameManager.shared
   private let cameraManager = CameraManager.shared
@@ -35,6 +38,21 @@ final class ContentViewModel: ObservableObject {
       .assign(to: \.faceDetected, on: self)
       .store(in: &cancellables)
     
+    frameManager.$innerDepth
+      .receive(on: RunLoop.main)
+      .assign(to: \.innerDepth, on: self)
+      .store(in: &cancellables)
+    
+    frameManager.$outerDepth
+      .receive(on: RunLoop.main)
+      .assign(to: \.outerDepth, on: self)
+      .store(in: &cancellables)
+
+    frameManager.$depthDiff
+      .receive(on: RunLoop.main)
+      .assign(to: \.depthDiff, on: self)
+      .store(in: &cancellables)
+
     cameraManager.$error
       .receive(on: RunLoop.main)
       .map { $0 }
