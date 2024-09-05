@@ -17,14 +17,12 @@ final class CameraManager: ObservableObject {
   
   static let shared = CameraManager()
   
-  @Published var error: CameraError?
-  
-  let session = AVCaptureSession()
+  @Published private(set) var error: CameraError?
   
   private let sessionQueue = DispatchQueue(label: "com.vmyroniuk.SessionQueue")
-  
+  private let session = AVCaptureSession()
   private let videoOutput = AVCaptureVideoDataOutput()
-  
+  private let depthOutput = AVCaptureDepthDataOutput()
   private var status = Status.unconfigured
   
   private init() {
@@ -32,12 +30,17 @@ final class CameraManager: ObservableObject {
   }
   
   func set(
-    _ delegate: AVCaptureVideoDataOutputSampleBufferDelegate,
+    videoDelegate: AVCaptureVideoDataOutputSampleBufferDelegate,
     queue: DispatchQueue
   ) {
-    sessionQueue.async {
-      self.videoOutput.setSampleBufferDelegate(delegate, queue: queue)
-    }
+    videoOutput.setSampleBufferDelegate(videoDelegate, queue: queue)
+  }
+  
+  func set(
+    depthDelegate: AVCaptureDepthDataOutputDelegate,
+    queue: DispatchQueue
+  ) {
+    depthOutput.setDelegate(depthDelegate, callbackQueue: queue)
   }
 }
 
@@ -60,7 +63,7 @@ private extension CameraManager {
     }
     
     let device = AVCaptureDevice.default(
-      .builtInWideAngleCamera,
+      .builtInTrueDepthCamera,
       for: .video,
       position: .front)
     guard let camera = device else {
@@ -97,6 +100,16 @@ private extension CameraManager {
       return
     }
     
+    if session.canAddOutput(depthOutput) {
+      session.addOutput(depthOutput)
+      let depthConnection = depthOutput.connection(with: .video)
+      depthConnection?.isEnabled = true
+    } else {
+      set(error: .cannotAddOutput)
+      status = .failed
+      return
+    }
+
     status = .configured
   }
   

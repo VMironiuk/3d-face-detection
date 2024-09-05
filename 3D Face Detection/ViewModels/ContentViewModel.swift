@@ -22,7 +22,7 @@ final class ContentViewModel: ObservableObject {
   }
   
   func setupSubscriptions() {
-    frameManager.$current
+    frameManager.$currentFrame
       .receive(on: RunLoop.main)
       .compactMap { buffer in
         CGImage.create(from: buffer)
@@ -30,7 +30,7 @@ final class ContentViewModel: ObservableObject {
       .assign(to: \.frame, on: self)
       .store(in: &cancellables)
     
-    frameManager.$faceDetected
+    frameManager.$isFaceDetected
       .receive(on: RunLoop.main)
       .assign(to: \.faceDetected, on: self)
       .store(in: &cancellables)
