@@ -11,10 +11,11 @@ struct DepthInfoView: View {
   var innerDepth: Float32
   var outerDepth: Float32
   var depthDiff: Float32
+  var image: CGImage?
   
   var body: some View {
     VStack {
-      HStack {
+      HStack(alignment: .top) {
         ZStack {
           RoundedRectangle(cornerRadius: 12)
           VStack {
@@ -28,6 +29,10 @@ struct DepthInfoView: View {
         .frame(width: 120, height: 170)
         .padding(8)
         Spacer()
+        FrameView(image: image)
+          .clipShape(RoundedRectangle(cornerRadius: 12))
+          .frame(width: 140, height: 200)
+          .padding(8)
       }
       Spacer()
     }

@@ -10,6 +10,7 @@ import Combine
 
 final class ContentViewModel: ObservableObject {
   @Published private(set) var frame: CGImage?
+  @Published private(set) var depthFrame: CGImage?
   @Published private(set) var error: Error?
   @Published private(set) var faceDetected: Bool = false
   @Published private(set) var innerDepth: Float32 = 0.0
@@ -31,6 +32,14 @@ final class ContentViewModel: ObservableObject {
         CGImage.create(from: buffer)
       }
       .assign(to: \.frame, on: self)
+      .store(in: &cancellables)
+
+    frameManager.$depthFrame
+      .receive(on: RunLoop.main)
+      .compactMap { buffer in
+        CGImage.create(fromDepthDataMap: buffer)
+      }
+      .assign(to: \.depthFrame, on: self)
       .store(in: &cancellables)
     
     frameManager.$isFaceDetected

@@ -16,6 +16,7 @@ final class FrameManager: NSObject, ObservableObject {
   private var framesCount = 0
   
   @Published private(set) var currentFrame: CVPixelBuffer?
+  @Published private(set) var depthFrame: CVPixelBuffer?
   @Published private(set) var isFaceDetected: Bool = false
   @Published private(set) var innerDepth: Float32 = 0.0
   @Published private(set) var outerDepth: Float32 = 0.0
@@ -81,6 +82,14 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     timestamp: CMTime,
     connection: AVCaptureConnection
   ) {
+    let depthData = depthData.converting(toDepthDataType: kCVPixelFormatType_DepthFloat32)
+    let depthDataMap = depthData.depthDataMap
+    depthDataMap.normalize()
+    
+    DispatchQueue.main.async { [weak self] in
+      self?.depthFrame = depthDataMap
+    }
+
     guard isAnyFaceDetected else {
       isFaceDetected = false
       return
@@ -90,10 +99,7 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
       return
     }
     framesCount = 0
-    
-    let depthData = depthData.converting(toDepthDataType: kCVPixelFormatType_DisparityFloat32)
-    let depthDataMap = depthData.depthDataMap
-    
+        
     CVPixelBufferLockBaseAddress(depthDataMap, .readOnly)
     
     guard let baseAddress = CVPixelBufferGetBaseAddress(depthDataMap) else {
@@ -106,7 +112,7 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     let width = CVPixelBufferGetWidth(depthDataMap)
     let height = CVPixelBufferGetHeight(depthDataMap)
     
-    let (innerDepthAverage, outerDepthAverage) = calculateDepthAverages(
+    let (innerDepthAverage, _, outerDepthAverage) = calculateDepthAverages(
       depthPointer: depthPointer,
       width: width,
       height: height
@@ -119,15 +125,15 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
       self?.outerDepth = outerDepthAverage
       self?.depthDiff = innerDepthAverage - outerDepthAverage
       
-      if innerDepthAverage < 2.0
-          && innerDepthAverage > 1.75
-          && innerDepthAverage - outerDepthAverage > 0.7
-          && innerDepthAverage - outerDepthAverage < 1.0
-      {
-        self?.isFaceDetected = true
-      } else {
-        self?.isFaceDetected = false
-      }
+//      if innerDepthAverage < 2.0
+//          && innerDepthAverage > 1.75
+//          && innerDepthAverage - outerDepthAverage > 0.7
+//          && innerDepthAverage - outerDepthAverage < 1.0
+//      {
+//        self?.isFaceDetected = true
+//      } else {
+//        self?.isFaceDetected = false
+//      }
     }
   }
   
@@ -135,33 +141,91 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     depthPointer: UnsafePointer<Float32>,
     width: Int,
     height: Int
-  ) -> (innerDepthAverage: Float32, outerDepthAverage: Float32
+  ) -> (headDepthAverage: Float32, bodyDepthAverage: Float32, outerDepthAverage: Float32
   ) {
-    let innerMinX = width / 3
-    let innerMinY = height / 3
-    let innerRect = CGRect(x: innerMinX, y: innerMinY, width: innerMinX, height: innerMinY)
+    let rightOuterAreaMinX = width / 5 * 2
+    let rightOuterAreaMinY = 0
+    let rightOuterArea = CGRect(x: rightOuterAreaMinX, y: rightOuterAreaMinY, width: width / 5 * 2, height: height / 3)
     
-    var innerCounter: Float32 = 0.0
-    var outerCounter: Float32 = 0.0
-    var innerDepthValue: Float32 = 0.0
-    var outerDepthValue: Float32 = 0.0
+    let leftOuterAreaMinX = width / 5 * 2
+    let leftOuterAreaMinY = height / 3 * 2
+    let leftOuterArea = CGRect(x: leftOuterAreaMinX, y: leftOuterAreaMinY, width: width / 5 * 2, height: height / 3)
+    
+    let headAreaMinX = width / 5 * 2
+    let headAreaMinY = height / 3
+    let headArea = CGRect(x: headAreaMinX, y: headAreaMinY, width: width / 5 * 2, height: height / 3)
+    
+    let bodyAreaMinX = width / 5 * 4
+    let bodyAreaMinY = 0
+    let bodyArea = CGRect(x: bodyAreaMinX, y: bodyAreaMinY, width: width / 5, height: height)
+    
+    var outerDepthValuesCounter: Float32 = 0.0
+    var headDepthValuesCounter: Float32 = 0.0
+    var bodyDepthValuesCounter: Float32 = 0.0
+    var outerDepthValuesSum: Float32 = 0.0
+    var headDepthValuesSum: Float32 = 0.0
+    var bodyDepthValuesSum: Float32 = 0.0
+    
     for y in 0..<height {
-      for x in 0..<width {
+      for x in (width / 5 * 2)..<width {
         let index = CGPoint(x: x, y: y)
         let depthValue = depthPointer[y * width + x]
-        if innerRect.contains(index) {
-          innerCounter += 1.0
-          innerDepthValue += depthValue
-        } else {
-          outerCounter += 1.0
-          outerDepthValue += depthValue
+        if rightOuterArea.contains(index) || leftOuterArea.contains(index) {
+          outerDepthValuesSum += depthValue
+          outerDepthValuesCounter += 1
+        } else if headArea.contains(index) {
+          headDepthValuesSum += depthValue
+          headDepthValuesCounter += 1
+        } else if bodyArea.contains(index) {
+          bodyDepthValuesSum += depthValue
+          bodyDepthValuesCounter += 1
         }
       }
     }
     
-    let innerDepthAverage = innerDepthValue / innerCounter
-    let outerDepthAverage = outerDepthValue / outerCounter
+    let outerDepthAverageValue = outerDepthValuesSum / outerDepthValuesCounter
+    let headDepthAverageValue = headDepthValuesSum / headDepthValuesCounter
+    let bodyDepthAverageValue = bodyDepthValuesSum / bodyDepthValuesCounter
     
-    return (innerDepthAverage, outerDepthAverage)
-  }  
+    return (headDepthAverageValue, bodyDepthAverageValue, outerDepthAverageValue)
+  }
+}
+
+extension CVPixelBuffer {
+  func normalize() {
+    let width = CVPixelBufferGetWidth(self)
+    let height = CVPixelBufferGetHeight(self)
+    
+    CVPixelBufferLockBaseAddress(self, CVPixelBufferLockFlags(rawValue: 0))
+    let floatBuffer = unsafeBitCast(CVPixelBufferGetBaseAddress(self), to: UnsafeMutablePointer<Float>.self)
+    
+    var minPixel: Float = 1.0
+    var maxPixel: Float = 0.0
+    
+    /// You might be wondering why the for loops below use `stride(from:to:step:)`
+    /// instead of a simple `Range` such as `0 ..< height`?
+    /// The answer is because in Swift 5.1, the iteration of ranges performs badly when the
+    /// compiler optimisation level (`SWIFT_OPTIMIZATION_LEVEL`) is set to `-Onone`,
+    /// which is eactly what happens when running this sample project in Debug mode.
+    /// If this was a production app then it might not be worth worrying about but it is still
+    /// worth being aware of.
+    
+    for y in stride(from: 0, to: height, by: 1) {
+      for x in stride(from: 0, to: width, by: 1) {
+        let pixel = floatBuffer[y * width + x]
+        minPixel = min(pixel, minPixel)
+        maxPixel = max(pixel, maxPixel)
+      }
+    }
+    
+    let range = maxPixel - minPixel
+    for y in stride(from: 0, to: height, by: 1) {
+      for x in stride(from: 0, to: width, by: 1) {
+        let pixel = floatBuffer[y * width + x]
+        floatBuffer[y * width + x] = (pixel - minPixel) / range
+      }
+    }
+    
+    CVPixelBufferUnlockBaseAddress(self, CVPixelBufferLockFlags(rawValue: 0))
+  }
 }

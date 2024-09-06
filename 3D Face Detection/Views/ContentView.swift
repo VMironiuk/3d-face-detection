@@ -18,7 +18,8 @@ struct ContentView: View {
       DepthInfoView(
         innerDepth: viewModel.innerDepth,
         outerDepth: viewModel.outerDepth,
-        depthDiff: viewModel.depthDiff
+        depthDiff: viewModel.depthDiff,
+        image: viewModel.depthFrame
       )
       
       FaceDetectionView(isFaceDetected: viewModel.faceDetected)

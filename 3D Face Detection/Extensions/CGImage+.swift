@@ -6,6 +6,7 @@
 //
 
 import CoreGraphics
+import CoreImage
 import VideoToolbox
 
 extension CGImage {
@@ -21,5 +22,16 @@ extension CGImage {
       imageOut: &image)
     
     return image
+  }
+  
+  static func create(fromDepthDataMap depthDataMap: CVPixelBuffer?) -> CGImage? {
+    guard let depthDataMap else {
+      return nil
+    }
+    
+    let depthCIImage = CIImage(cvPixelBuffer: depthDataMap)
+      .transformed(by: CGAffineTransform(rotationAngle: -(90.0 * Double.pi / 180.0)))
+
+    return CIContext().createCGImage(depthCIImage, from: depthCIImage.extent)
   }
 }
