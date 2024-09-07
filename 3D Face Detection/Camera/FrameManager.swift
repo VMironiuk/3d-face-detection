@@ -143,7 +143,11 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     DispatchQueue.main.async { [weak self] in
       self?.innerDepth = innerDepthAverage
 
-      self?.isFaceDetected = (innerDepthAverage >= 0.5 && innerDepthAverage <= 0.8)
+      if self?.useDisparity == true {
+        self?.isFaceDetected = (innerDepthAverage >= 1.5 && innerDepthAverage <= 2.0)
+      } else {
+        self?.isFaceDetected = (innerDepthAverage >= 0.5 && innerDepthAverage <= 0.8)
+      }
     }
   }
   
