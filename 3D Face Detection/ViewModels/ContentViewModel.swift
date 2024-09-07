@@ -16,6 +16,10 @@ final class ContentViewModel: ObservableObject {
   @Published private(set) var innerDepth: Float32 = 0.0
   @Published private(set) var outerDepth: Float32 = 0.0
   @Published private(set) var depthDiff: Float32 = 0.0
+  @Published private(set) var faceBoxX: CGFloat = 0.0
+  @Published private(set) var faceBoxY: CGFloat = 0.0
+  @Published private(set) var faceBoxWidth: CGFloat = 0.0
+  @Published private(set) var faceBoxHeight: CGFloat = 0.0
   
   private let frameManager = FrameManager.shared
   private let cameraManager = CameraManager.shared
@@ -68,6 +72,26 @@ final class ContentViewModel: ObservableObject {
     frameManager.$depthDiff
       .receive(on: RunLoop.main)
       .assign(to: \.depthDiff, on: self)
+      .store(in: &cancellables)
+    
+    frameManager.$faceBoxX
+      .receive(on: RunLoop.main)
+      .assign(to: \.faceBoxX, on: self)
+      .store(in: &cancellables)
+
+    frameManager.$faceBoxY
+      .receive(on: RunLoop.main)
+      .assign(to: \.faceBoxY, on: self)
+      .store(in: &cancellables)
+
+    frameManager.$faceBoxWidth
+      .receive(on: RunLoop.main)
+      .assign(to: \.faceBoxWidth, on: self)
+      .store(in: &cancellables)
+
+    frameManager.$faceBoxHeight
+      .receive(on: RunLoop.main)
+      .assign(to: \.faceBoxHeight, on: self)
       .store(in: &cancellables)
 
     cameraManager.$error

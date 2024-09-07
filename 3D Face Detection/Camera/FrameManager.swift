@@ -22,6 +22,12 @@ final class FrameManager: NSObject, ObservableObject {
   @Published private(set) var innerDepth: Float32 = 0.0
   @Published private(set) var outerDepth: Float32 = 0.0
   @Published private(set) var depthDiff: Float32 = 0.0
+  @Published private(set) var faceBoxX: CGFloat = 0.0
+  @Published private(set) var faceBoxY: CGFloat = 0.0
+  @Published private(set) var faceBoxWidth: CGFloat = 0.0
+  @Published private(set) var faceBoxHeight: CGFloat = 0.0
+  
+  private var faceBoundingBox: CGRect = .zero
     
   private let videoOutputQueue = DispatchQueue(
     label: "com.vmyroniuk.VideoOutputQueue",
@@ -41,13 +47,16 @@ final class FrameManager: NSObject, ObservableObject {
   }
   
   private func detectedFace(request: VNRequest, error: Error?) {
-    if let results = request.results as? [VNFaceObservation], results.first != nil {
+    if let results = request.results as? [VNFaceObservation], let result = results.first {
       isAnyFaceDetected = true
+      faceBoundingBox = result.boundingBox
     } else if let error {
       isAnyFaceDetected = false
+      faceBoundingBox = .zero
       print("FACE::DETECTION_ERROR: \(error.localizedDescription)")
     } else {
       isAnyFaceDetected = false
+      faceBoundingBox = .zero
     }
   }
 }
@@ -93,7 +102,6 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
       : kCVPixelFormatType_DepthFloat32
     )
     let depthDataMap = depthData.depthDataMap
-//    depthDataMap.normalize()
     
     DispatchQueue.main.async { [weak self] in
       self?.depthFrame = depthDataMap
@@ -108,6 +116,11 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
       return
     }
     framesCount = 0
+    
+    guard isFaceBoundingBoxAllowed(faceBoundingBox) else {
+      isFaceDetected = false
+      return
+    }
         
     CVPixelBufferLockBaseAddress(depthDataMap, .readOnly)
     
@@ -138,6 +151,8 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     }
   }
   
+  /// Note that the matrix constructed from the `depthPointer` represents a frame
+  /// rotated 90 degrees counter-clockwise comparing to the device's screen users see
   private func calculateDepthAverages(
     depthPointer: UnsafePointer<Float32>,
     width: Int,
@@ -180,43 +195,23 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     
     return (headDepthAverageValue, outerDepthAverageValue)
   }
-}
-
-extension CVPixelBuffer {
-  func normalize() {
-    let width = CVPixelBufferGetWidth(self)
-    let height = CVPixelBufferGetHeight(self)
+  
+  /// Note that the face's bounding box is 90 degrees rotated counter-clockwise that's why when
+  /// a user rotates a device around y axis there are changes in the bounding box's minY instead
+  /// of minX and vice versa
+  private func isFaceBoundingBoxAllowed(_ box: CGRect) -> Bool {
+    faceBoxX = box.minY
+    faceBoxY = box.minX
+    faceBoxWidth = box.width
+    faceBoxHeight = box.height
     
-    CVPixelBufferLockBaseAddress(self, CVPixelBufferLockFlags(rawValue: 0))
-    let floatBuffer = unsafeBitCast(CVPixelBufferGetBaseAddress(self), to: UnsafeMutablePointer<Float>.self)
-    
-    var minPixel: Float = 1.0
-    var maxPixel: Float = 0.0
-    
-    /// You might be wondering why the for loops below use `stride(from:to:step:)`
-    /// instead of a simple `Range` such as `0 ..< height`?
-    /// The answer is because in Swift 5.1, the iteration of ranges performs badly when the
-    /// compiler optimisation level (`SWIFT_OPTIMIZATION_LEVEL`) is set to `-Onone`,
-    /// which is eactly what happens when running this sample project in Debug mode.
-    /// If this was a production app then it might not be worth worrying about but it is still
-    /// worth being aware of.
-    
-    for y in stride(from: 0, to: height, by: 1) {
-      for x in stride(from: 0, to: width, by: 1) {
-        let pixel = floatBuffer[y * width + x]
-        minPixel = min(pixel, minPixel)
-        maxPixel = max(pixel, maxPixel)
-      }
-    }
-    
-    let range = maxPixel - minPixel
-    for y in stride(from: 0, to: height, by: 1) {
-      for x in stride(from: 0, to: width, by: 1) {
-        let pixel = floatBuffer[y * width + x]
-        floatBuffer[y * width + x] = (pixel - minPixel) / range
-      }
-    }
-    
-    CVPixelBufferUnlockBaseAddress(self, CVPixelBufferLockFlags(rawValue: 0))
+    return box.minY >= 0.275
+    && box.minY <= 0.35
+    && box.minX >= 0.35
+    && box.minX <= 0.435
+    && box.width >= 0.175
+    && box.width <= 0.235
+    && box.height >= 0.35
+    && box.height <= 0.4
   }
 }
