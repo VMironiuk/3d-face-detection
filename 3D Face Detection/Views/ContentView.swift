@@ -18,8 +18,6 @@ struct ContentView: View {
       
       DepthInfoView(
         innerDepth: viewModel.innerDepth,
-        outerDepth: viewModel.outerDepth,
-        depthDiff: viewModel.depthDiff,
         faceBoxX: viewModel.faceBoxX,
         faceBoxY: viewModel.faceBoxY,
         faceBoxWidth: viewModel.faceBoxWidth,

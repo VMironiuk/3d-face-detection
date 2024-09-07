@@ -20,8 +20,6 @@ final class FrameManager: NSObject, ObservableObject {
   @Published private(set) var depthFrame: CVPixelBuffer?
   @Published private(set) var isFaceDetected: Bool = false
   @Published private(set) var innerDepth: Float32 = 0.0
-  @Published private(set) var outerDepth: Float32 = 0.0
-  @Published private(set) var depthDiff: Float32 = 0.0
   @Published private(set) var faceBoxX: CGFloat = 0.0
   @Published private(set) var faceBoxY: CGFloat = 0.0
   @Published private(set) var faceBoxWidth: CGFloat = 0.0
@@ -134,7 +132,7 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     let width = CVPixelBufferGetWidth(depthDataMap)
     let height = CVPixelBufferGetHeight(depthDataMap)
     
-    let (innerDepthAverage, outerDepthAverage) = calculateDepthAverages(
+    let (innerDepthAverage, _) = calculateDepthAverages(
       depthPointer: depthPointer,
       width: width,
       height: height
@@ -144,8 +142,6 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     
     DispatchQueue.main.async { [weak self] in
       self?.innerDepth = innerDepthAverage
-      self?.outerDepth = outerDepthAverage
-      self?.depthDiff = innerDepthAverage - outerDepthAverage
 
       self?.isFaceDetected = (innerDepthAverage >= 0.5 && innerDepthAverage <= 0.8)
     }

@@ -14,8 +14,6 @@ final class ContentViewModel: ObservableObject {
   @Published private(set) var error: Error?
   @Published private(set) var faceDetected: Bool = false
   @Published private(set) var innerDepth: Float32 = 0.0
-  @Published private(set) var outerDepth: Float32 = 0.0
-  @Published private(set) var depthDiff: Float32 = 0.0
   @Published private(set) var faceBoxX: CGFloat = 0.0
   @Published private(set) var faceBoxY: CGFloat = 0.0
   @Published private(set) var faceBoxWidth: CGFloat = 0.0
@@ -62,16 +60,6 @@ final class ContentViewModel: ObservableObject {
     frameManager.$innerDepth
       .receive(on: RunLoop.main)
       .assign(to: \.innerDepth, on: self)
-      .store(in: &cancellables)
-    
-    frameManager.$outerDepth
-      .receive(on: RunLoop.main)
-      .assign(to: \.outerDepth, on: self)
-      .store(in: &cancellables)
-
-    frameManager.$depthDiff
-      .receive(on: RunLoop.main)
-      .assign(to: \.depthDiff, on: self)
       .store(in: &cancellables)
     
     frameManager.$faceBoxX
