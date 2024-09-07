@@ -1,5 +1,5 @@
 //
-//  DepthInfoView.swift
+//  DetectionInfoView.swift
 //  3D Face Detection
 //
 //  Created by Volodymyr Myroniuk on 05.09.2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DepthInfoView: View {
+struct DetectionInfoView: View {
   var innerDepth: Float32
   var faceBoxX: CGFloat
   var faceBoxY: CGFloat
@@ -60,7 +60,7 @@ private struct RecordView: View {
 }
 
 #Preview {
-  DepthInfoView(
+  DetectionInfoView(
     innerDepth: 1.234566,
     faceBoxX: 1.234566,
     faceBoxY: 1.234566,
