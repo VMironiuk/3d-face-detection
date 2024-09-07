@@ -19,11 +19,11 @@ final class FrameManager: NSObject, ObservableObject {
   @Published private(set) var currentFrame: CVPixelBuffer?
   @Published private(set) var depthFrame: CVPixelBuffer?
   @Published private(set) var isFaceDetected: Bool = false
-  @Published private(set) var innerDepth: Float32 = 0.0
-  @Published private(set) var faceBoxX: CGFloat = 0.0
-  @Published private(set) var faceBoxY: CGFloat = 0.0
-  @Published private(set) var faceBoxWidth: CGFloat = 0.0
-  @Published private(set) var faceBoxHeight: CGFloat = 0.0
+  @Published private(set) var depth = DetectionRecordItem(type: .depth, value: 0.0)
+  @Published private(set) var faceBoxX = DetectionRecordItem(type: .boxX, value: 0.0)
+  @Published private(set) var faceBoxY = DetectionRecordItem(type: .boxY, value: 0.0)
+  @Published private(set) var faceBoxWidth = DetectionRecordItem(type: .boxWidth, value: 0.0)
+  @Published private(set) var faceBoxHeight = DetectionRecordItem(type: .boxHeight, value: 0.0)
   
   private var faceBoundingBox: CGRect = .zero
     
@@ -141,13 +141,13 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     CVPixelBufferUnlockBaseAddress(depthDataMap, .readOnly)
     
     DispatchQueue.main.async { [weak self] in
-      self?.innerDepth = innerDepthAverage
-
-      if self?.useDisparity == true {
-        self?.isFaceDetected = (innerDepthAverage >= 1.5 && innerDepthAverage <= 2.0)
-      } else {
-        self?.isFaceDetected = (innerDepthAverage >= 0.5 && innerDepthAverage <= 0.8)
-      }
+      let depth = DetectionRecordItem(
+        type: self?.useDisparity == true ? .disparity : .depth,
+        value: innerDepthAverage
+      )
+      self?.depth = depth
+      
+      self?.isFaceDetected = depth.isMatching
     }
   }
   
@@ -200,18 +200,14 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
   /// a user rotates a device around y axis there are changes in the bounding box's minY instead
   /// of minX and vice versa
   private func isFaceBoundingBoxAllowed(_ box: CGRect) -> Bool {
-    faceBoxX = box.minY
-    faceBoxY = box.minX
-    faceBoxWidth = box.width
-    faceBoxHeight = box.height
+    faceBoxX = .init(type: .boxX, value: Float32(box.minY))
+    faceBoxY = .init(type: .boxY, value: Float32(box.minX))
+    faceBoxWidth = .init(type: .boxWidth, value: Float32(box.width))
+    faceBoxHeight = .init(type: .boxHeight, value: Float32(box.height))
     
-    return box.minY >= 0.2
-    && box.minY <= 0.35
-    && box.minX >= 0.3
-    && box.minX <= 0.45
-    && box.width >= 0.175
-    && box.width <= 0.3
-    && box.height >= 0.35
-    && box.height <= 0.5
+    return faceBoxX.isMatching
+    && faceBoxY.isMatching
+    && faceBoxWidth.isMatching
+    && faceBoxHeight.isMatching
   }
 }

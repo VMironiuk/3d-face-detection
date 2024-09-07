@@ -17,7 +17,7 @@ struct ContentView: View {
         .ignoresSafeArea()
       
       DetectionInfoView(
-        innerDepth: viewModel.innerDepth,
+        depth: viewModel.depth,
         faceBoxX: viewModel.faceBoxX,
         faceBoxY: viewModel.faceBoxY,
         faceBoxWidth: viewModel.faceBoxWidth,

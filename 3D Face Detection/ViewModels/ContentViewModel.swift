@@ -13,11 +13,11 @@ final class ContentViewModel: ObservableObject {
   @Published private(set) var depthFrame: CGImage?
   @Published private(set) var error: Error?
   @Published private(set) var faceDetected: Bool = false
-  @Published private(set) var innerDepth: Float32 = 0.0
-  @Published private(set) var faceBoxX: CGFloat = 0.0
-  @Published private(set) var faceBoxY: CGFloat = 0.0
-  @Published private(set) var faceBoxWidth: CGFloat = 0.0
-  @Published private(set) var faceBoxHeight: CGFloat = 0.0
+  @Published private(set) var depth = DetectionRecordItem(type: .depth, value: 0.0)
+  @Published private(set) var faceBoxX = DetectionRecordItem(type: .boxX, value: 0.0)
+  @Published private(set) var faceBoxY = DetectionRecordItem(type: .boxY, value: 0.0)
+  @Published private(set) var faceBoxWidth = DetectionRecordItem(type: .boxWidth, value: 0.0)
+  @Published private(set) var faceBoxHeight = DetectionRecordItem(type: .boxHeight, value: 0.0)
   
   private let frameManager = FrameManager.shared
   private let cameraManager = CameraManager.shared
@@ -57,9 +57,9 @@ final class ContentViewModel: ObservableObject {
       .assign(to: \.faceDetected, on: self)
       .store(in: &cancellables)
     
-    frameManager.$innerDepth
+    frameManager.$depth
       .receive(on: RunLoop.main)
-      .assign(to: \.innerDepth, on: self)
+      .assign(to: \.depth, on: self)
       .store(in: &cancellables)
     
     frameManager.$faceBoxX
