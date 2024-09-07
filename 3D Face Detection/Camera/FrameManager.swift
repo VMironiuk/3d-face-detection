@@ -121,7 +121,7 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     let width = CVPixelBufferGetWidth(depthDataMap)
     let height = CVPixelBufferGetHeight(depthDataMap)
     
-    let (innerDepthAverage, _, outerDepthAverage) = calculateDepthAverages(
+    let (innerDepthAverage, outerDepthAverage) = calculateDepthAverages(
       depthPointer: depthPointer,
       width: width,
       height: height
@@ -133,16 +133,8 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
       self?.innerDepth = innerDepthAverage
       self?.outerDepth = outerDepthAverage
       self?.depthDiff = innerDepthAverage - outerDepthAverage
-      
-//      if innerDepthAverage < 2.0
-//          && innerDepthAverage > 1.75
-//          && innerDepthAverage - outerDepthAverage > 0.7
-//          && innerDepthAverage - outerDepthAverage < 1.0
-//      {
-//        self?.isFaceDetected = true
-//      } else {
-//        self?.isFaceDetected = false
-//      }
+
+      self?.isFaceDetected = (innerDepthAverage >= 0.6 && innerDepthAverage <= 0.8)
     }
   }
   
@@ -150,7 +142,7 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     depthPointer: UnsafePointer<Float32>,
     width: Int,
     height: Int
-  ) -> (headDepthAverage: Float32, bodyDepthAverage: Float32, outerDepthAverage: Float32
+  ) -> (headDepthAverage: Float32, outerDepthAverage: Float32
   ) {
     let rightOuterAreaMinX = width / 5 * 2
     let rightOuterAreaMinY = 0
@@ -164,16 +156,10 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     let headAreaMinY = height / 3
     let headArea = CGRect(x: headAreaMinX, y: headAreaMinY, width: width / 5 * 2, height: height / 3)
     
-    let bodyAreaMinX = width / 5 * 4
-    let bodyAreaMinY = 0
-    let bodyArea = CGRect(x: bodyAreaMinX, y: bodyAreaMinY, width: width / 5, height: height)
-    
     var outerDepthValuesCounter: Float32 = 0.0
     var headDepthValuesCounter: Float32 = 0.0
-    var bodyDepthValuesCounter: Float32 = 0.0
     var outerDepthValuesSum: Float32 = 0.0
     var headDepthValuesSum: Float32 = 0.0
-    var bodyDepthValuesSum: Float32 = 0.0
     
     for y in 0..<height {
       for x in (width / 5 * 2)..<width {
@@ -185,18 +171,14 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
         } else if headArea.contains(index) {
           headDepthValuesSum += depthValue
           headDepthValuesCounter += 1
-        } else if bodyArea.contains(index) {
-          bodyDepthValuesSum += depthValue
-          bodyDepthValuesCounter += 1
         }
       }
     }
     
     let outerDepthAverageValue = outerDepthValuesSum / outerDepthValuesCounter
     let headDepthAverageValue = headDepthValuesSum / headDepthValuesCounter
-    let bodyDepthAverageValue = bodyDepthValuesSum / bodyDepthValuesCounter
     
-    return (headDepthAverageValue, bodyDepthAverageValue, outerDepthAverageValue)
+    return (headDepthAverageValue, outerDepthAverageValue)
   }
 }
 
