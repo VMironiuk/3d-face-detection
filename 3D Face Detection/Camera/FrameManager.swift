@@ -147,7 +147,7 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
       self?.outerDepth = outerDepthAverage
       self?.depthDiff = innerDepthAverage - outerDepthAverage
 
-      self?.isFaceDetected = (innerDepthAverage >= 0.6 && innerDepthAverage <= 0.8)
+      self?.isFaceDetected = (innerDepthAverage >= 0.5 && innerDepthAverage <= 0.8)
     }
   }
   
@@ -205,13 +205,13 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     faceBoxWidth = box.width
     faceBoxHeight = box.height
     
-    return box.minY >= 0.275
+    return box.minY >= 0.2
     && box.minY <= 0.35
-    && box.minX >= 0.35
-    && box.minX <= 0.435
+    && box.minX >= 0.3
+    && box.minX <= 0.45
     && box.width >= 0.175
-    && box.width <= 0.235
+    && box.width <= 0.3
     && box.height >= 0.35
-    && box.height <= 0.4
+    && box.height <= 0.5
   }
 }
