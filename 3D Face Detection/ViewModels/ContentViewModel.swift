@@ -25,7 +25,15 @@ final class ContentViewModel: ObservableObject {
     setupSubscriptions()
   }
   
-  func setupSubscriptions() {
+  func useDisparity() {
+    frameManager.useDisparity(true)
+  }
+  
+  func useDepth() {
+    frameManager.useDisparity(false)
+  }
+  
+  private func setupSubscriptions() {
     frameManager.$currentFrame
       .receive(on: RunLoop.main)
       .compactMap { buffer in

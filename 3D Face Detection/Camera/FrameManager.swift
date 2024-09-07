@@ -14,6 +14,7 @@ final class FrameManager: NSObject, ObservableObject {
   private let sequenceHandler = VNSequenceRequestHandler()
   private var isAnyFaceDetected = false
   private var framesCount = 0
+  private var useDisparity = false
   
   @Published private(set) var currentFrame: CVPixelBuffer?
   @Published private(set) var depthFrame: CVPixelBuffer?
@@ -21,13 +22,17 @@ final class FrameManager: NSObject, ObservableObject {
   @Published private(set) var innerDepth: Float32 = 0.0
   @Published private(set) var outerDepth: Float32 = 0.0
   @Published private(set) var depthDiff: Float32 = 0.0
-  
-  let videoOutputQueue = DispatchQueue(
+    
+  private let videoOutputQueue = DispatchQueue(
     label: "com.vmyroniuk.VideoOutputQueue",
     qos: .userInitiated,
     attributes: [],
     autoreleaseFrequency: .workItem
   )
+  
+  func useDisparity(_ useDisparity: Bool) {
+    self.useDisparity = useDisparity
+  }
   
   private override init() {
     super.init()
@@ -82,9 +87,13 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     timestamp: CMTime,
     connection: AVCaptureConnection
   ) {
-    let depthData = depthData.converting(toDepthDataType: kCVPixelFormatType_DepthFloat32)
+    let depthData = depthData.converting(
+      toDepthDataType: useDisparity
+      ? kCVPixelFormatType_DisparityFloat32
+      : kCVPixelFormatType_DepthFloat32
+    )
     let depthDataMap = depthData.depthDataMap
-    depthDataMap.normalize()
+//    depthDataMap.normalize()
     
     DispatchQueue.main.async { [weak self] in
       self?.depthFrame = depthDataMap
