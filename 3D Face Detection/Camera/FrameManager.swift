@@ -132,7 +132,7 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     let width = CVPixelBufferGetWidth(depthDataMap)
     let height = CVPixelBufferGetHeight(depthDataMap)
     
-    let (innerDepthAverage, _) = calculateDepthAverages(
+    let depthValue = calculateDepthAverage(
       depthPointer: depthPointer,
       width: width,
       height: height
@@ -141,59 +141,39 @@ extension FrameManager: AVCaptureDepthDataOutputDelegate {
     CVPixelBufferUnlockBaseAddress(depthDataMap, .readOnly)
     
     DispatchQueue.main.async { [weak self] in
-      let depth = DetectionRecordItem(
+      let depthRecord = DetectionRecordItem(
         type: self?.useDisparity == true ? .disparity : .depth,
-        value: innerDepthAverage
+        value: depthValue
       )
-      self?.depth = depth
+      self?.depth = depthRecord
       
-      self?.isFaceDetected = depth.isMatching
+      self?.isFaceDetected = depthRecord.isMatching
     }
   }
   
   /// Note that the matrix constructed from the `depthPointer` represents a frame
   /// rotated 90 degrees counter-clockwise comparing to the device's screen users see
-  private func calculateDepthAverages(
+  private func calculateDepthAverage(
     depthPointer: UnsafePointer<Float32>,
     width: Int,
     height: Int
-  ) -> (headDepthAverage: Float32, outerDepthAverage: Float32
-  ) {
-    let rightOuterAreaMinX = width / 5 * 2
-    let rightOuterAreaMinY = 0
-    let rightOuterArea = CGRect(x: rightOuterAreaMinX, y: rightOuterAreaMinY, width: width / 5 * 2, height: height / 3)
-    
-    let leftOuterAreaMinX = width / 5 * 2
-    let leftOuterAreaMinY = height / 3 * 2
-    let leftOuterArea = CGRect(x: leftOuterAreaMinX, y: leftOuterAreaMinY, width: width / 5 * 2, height: height / 3)
-    
+  ) -> Float32 {
     let headAreaMinX = width / 5 * 2
+    let headAreaMaxX = width / 5 * 3
     let headAreaMinY = height / 3
-    let headArea = CGRect(x: headAreaMinX, y: headAreaMinY, width: width / 5 * 2, height: height / 3)
+    let headAreaMaxY = height / 3 * 2
     
-    var outerDepthValuesCounter: Float32 = 0.0
     var headDepthValuesCounter: Float32 = 0.0
-    var outerDepthValuesSum: Float32 = 0.0
     var headDepthValuesSum: Float32 = 0.0
     
-    for y in 0..<height {
-      for x in (width / 5 * 2)..<width {
-        let index = CGPoint(x: x, y: y)
-        let depthValue = depthPointer[y * width + x]
-        if rightOuterArea.contains(index) || leftOuterArea.contains(index) {
-          outerDepthValuesSum += depthValue
-          outerDepthValuesCounter += 1
-        } else if headArea.contains(index) {
-          headDepthValuesSum += depthValue
-          headDepthValuesCounter += 1
-        }
+    for y in headAreaMinY..<headAreaMaxY {
+      for x in headAreaMinX..<headAreaMaxX {
+        headDepthValuesSum += depthPointer[y * width + x]
+        headDepthValuesCounter += 1
       }
     }
     
-    let outerDepthAverageValue = outerDepthValuesSum / outerDepthValuesCounter
-    let headDepthAverageValue = headDepthValuesSum / headDepthValuesCounter
-    
-    return (headDepthAverageValue, outerDepthAverageValue)
+    return headDepthValuesSum / headDepthValuesCounter
   }
   
   /// Note that the face's bounding box is 90 degrees rotated counter-clockwise that's why when
