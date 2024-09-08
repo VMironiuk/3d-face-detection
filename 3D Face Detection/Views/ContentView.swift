@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
   @StateObject private var viewModel = ContentViewModel()
-  @State private var useDisparity = false
+  @State private var pixelFormat: PixelFormat = .depth
   
   var body: some View {
     ZStack {
@@ -17,6 +17,7 @@ struct ContentView: View {
         .ignoresSafeArea()
       
       DetectionInfoView(
+        pixelFormat: $pixelFormat,
         depth: viewModel.depth,
         faceBoxX: viewModel.faceBoxX,
         faceBoxY: viewModel.faceBoxY,
@@ -28,28 +29,13 @@ struct ContentView: View {
       FaceDetectionView(isFaceDetected: viewModel.faceDetected)
 
       ErrorView(error: viewModel.error)
-      
-      VStack {
-        Spacer()
-        HStack {
-          Toggle(isOn: $useDisparity) {
-            Text("Disparity:")
-              .foregroundStyle(.teal)
-              .font(.title2)
-              .bold()
-          }
-          .frame(width: 160)
-          .padding(20)
-          
-          Spacer()
-        }
-      }
     }
-    .onChange(of: useDisparity) {
-      if useDisparity {
-        viewModel.useDisparity()
-      } else {
+    .onChange(of: pixelFormat) {
+      switch pixelFormat {
+      case .depth:
         viewModel.useDepth()
+      case .disparity:
+        viewModel.useDisparity()
       }
     }
   }

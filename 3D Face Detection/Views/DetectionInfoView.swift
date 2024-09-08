@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct DetectionInfoView: View {
+  @Binding var pixelFormat: PixelFormat
+  
   var depth: DetectionRecordItem
   var faceBoxX: DetectionRecordItem
   var faceBoxY: DetectionRecordItem
@@ -39,6 +41,13 @@ struct DetectionInfoView: View {
           .padding(8)
       }
       Spacer()
+      Picker("", selection: $pixelFormat) {
+        ForEach(PixelFormat.allCases) { format in
+          Text(format.rawValue.uppercased())
+        }
+      }
+      .pickerStyle(.segmented)
+      .padding(.horizontal, 40)
     }
   }
 }
@@ -61,6 +70,7 @@ private struct RecordView: View {
 
 #Preview {
   DetectionInfoView(
+    pixelFormat: .constant(.depth),
     depth: DetectionRecordItem(type: .depth, value: 1.23456),
     faceBoxX: DetectionRecordItem(type: .boxX, value: 1.23456),
     faceBoxY: DetectionRecordItem(type: .boxY, value: 1.23456),

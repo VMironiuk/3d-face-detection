@@ -21,6 +21,7 @@
 		2E9327B12C8CA55900D2E742 /* DetectionRecordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9327B02C8CA55900D2E742 /* DetectionRecordItem.swift */; };
 		2EB5F7242C89DD42009378DA /* DetectionInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB5F7232C89DD42009378DA /* DetectionInfoView.swift */; };
 		2ED6FEBD2C7B1A910091364E /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED6FEBC2C7B1A910091364E /* ErrorView.swift */; };
+		2EFE2A7A2C8D733000904D1F /* PixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFE2A792C8D733000904D1F /* PixelFormat.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		2E9327B02C8CA55900D2E742 /* DetectionRecordItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionRecordItem.swift; sourceTree = "<group>"; };
 		2EB5F7232C89DD42009378DA /* DetectionInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionInfoView.swift; sourceTree = "<group>"; };
 		2ED6FEBC2C7B1A910091364E /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		2EFE2A792C8D733000904D1F /* PixelFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelFormat.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				2E9327B02C8CA55900D2E742 /* DetectionRecordItem.swift */,
+				2EFE2A792C8D733000904D1F /* PixelFormat.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -210,6 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E2124B12C79FBB500E55062 /* FrameView.swift in Sources */,
+				2EFE2A7A2C8D733000904D1F /* PixelFormat.swift in Sources */,
 				2E2124BF2C7A0EB400E55062 /* CGImage+.swift in Sources */,
 				2E2124B92C7A0BF300E55062 /* FrameManager.swift in Sources */,
 				2E2B4D312C7C6B0E0090EC8B /* FaceDetectionView.swift in Sources */,
