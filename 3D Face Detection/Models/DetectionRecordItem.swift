@@ -47,7 +47,7 @@ struct DetectionRecordItem {
   var valueMatching: ValueMatching {
     switch type {
     case .depth:
-      if value >= 0.5 && value <= 0.8 {
+      if value >= 0.45 && value <= 0.8 {
         return .match
       } else if value < 0.5 {
         return .low
@@ -63,7 +63,7 @@ struct DetectionRecordItem {
         return .high
       }
     case .boxX:
-      if value >= 0.2 && value <= 0.35 {
+      if value >= 0.15 && value <= 0.35 {
         return .match
       } else if value < 0.2 {
         return .low
@@ -71,7 +71,7 @@ struct DetectionRecordItem {
         return .high
       }
     case .boxY:
-      if value >= 0.3 && value <= 0.45 {
+      if value >= 0.25 && value <= 0.45 {
         return .match
       } else if value < 0.3 {
         return .low
@@ -79,7 +79,7 @@ struct DetectionRecordItem {
         return .high
       }
     case .boxWidth:
-      if value >= 0.175 && value <= 0.3 {
+      if value >= 0.175 && value <= 0.35 {
         return .match
       } else if value < 0.175 {
         return .low
@@ -87,7 +87,7 @@ struct DetectionRecordItem {
         return .high
       }
     case .boxHeight:
-      if value >= 0.35 && value <= 0.5 {
+      if value >= 0.35 && value <= 0.55 {
         return .match
       } else if value < 0.35 {
         return .low
