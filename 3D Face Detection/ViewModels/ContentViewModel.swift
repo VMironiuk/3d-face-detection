@@ -21,7 +21,6 @@ final class ContentViewModel: ObservableObject {
   
   private let frameManager = FrameManager.shared
   private let cameraManager = CameraManager.shared
-  private var cancellables = Set<AnyCancellable>()
   
   init() {
     setupSubscriptions()
@@ -41,51 +40,42 @@ final class ContentViewModel: ObservableObject {
       .compactMap { buffer in
         CGImage.create(from: buffer)
       }
-      .assign(to: \.frame, on: self)
-      .store(in: &cancellables)
+      .assign(to: &$frame)
 
     frameManager.$depthFrame
       .receive(on: RunLoop.main)
       .compactMap { buffer in
         CGImage.create(fromDepthDataMap: buffer)
       }
-      .assign(to: \.depthFrame, on: self)
-      .store(in: &cancellables)
+      .assign(to: &$depthFrame)
     
     frameManager.$isFaceDetected
       .receive(on: RunLoop.main)
-      .assign(to: \.faceDetected, on: self)
-      .store(in: &cancellables)
+      .assign(to: &$faceDetected)
     
     frameManager.$depth
       .receive(on: RunLoop.main)
-      .assign(to: \.depth, on: self)
-      .store(in: &cancellables)
+      .assign(to: &$depth)
     
     frameManager.$faceBoxX
       .receive(on: RunLoop.main)
-      .assign(to: \.faceBoxX, on: self)
-      .store(in: &cancellables)
+      .assign(to: &$faceBoxX)
 
     frameManager.$faceBoxY
       .receive(on: RunLoop.main)
-      .assign(to: \.faceBoxY, on: self)
-      .store(in: &cancellables)
+      .assign(to: &$faceBoxY)
 
     frameManager.$faceBoxWidth
       .receive(on: RunLoop.main)
-      .assign(to: \.faceBoxWidth, on: self)
-      .store(in: &cancellables)
+      .assign(to: &$faceBoxWidth)
 
     frameManager.$faceBoxHeight
       .receive(on: RunLoop.main)
-      .assign(to: \.faceBoxHeight, on: self)
-      .store(in: &cancellables)
+      .assign(to: &$faceBoxHeight)
 
     cameraManager.$error
       .receive(on: RunLoop.main)
       .map { $0 }
-      .assign(to: \.error, on: self)
-      .store(in: &cancellables)
+      .assign(to: &$error)
   }
 }
