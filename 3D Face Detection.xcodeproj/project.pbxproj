@@ -14,7 +14,7 @@
 		2E2124B12C79FBB500E55062 /* FrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B02C79FBB500E55062 /* FrameView.swift */; };
 		2E2124B52C79FE6900E55062 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B42C79FE6900E55062 /* CameraManager.swift */; };
 		2E2124B72C79FFB300E55062 /* CameraError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B62C79FFB300E55062 /* CameraError.swift */; };
-		2E2124B92C7A0BF300E55062 /* FrameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B82C7A0BF300E55062 /* FrameManager.swift */; };
+		2E2124B92C7A0BF300E55062 /* CameraFrameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124B82C7A0BF300E55062 /* CameraFrameManager.swift */; };
 		2E2124BC2C7A0DE800E55062 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124BB2C7A0DE800E55062 /* ContentViewModel.swift */; };
 		2E2124BF2C7A0EB400E55062 /* CGImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2124BE2C7A0EB400E55062 /* CGImage+.swift */; };
 		2E2B4D312C7C6B0E0090EC8B /* FaceDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2B4D302C7C6B0E0090EC8B /* FaceDetectionView.swift */; };
@@ -34,7 +34,7 @@
 		2E2124B02C79FBB500E55062 /* FrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameView.swift; sourceTree = "<group>"; };
 		2E2124B42C79FE6900E55062 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		2E2124B62C79FFB300E55062 /* CameraError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraError.swift; sourceTree = "<group>"; };
-		2E2124B82C7A0BF300E55062 /* FrameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameManager.swift; sourceTree = "<group>"; };
+		2E2124B82C7A0BF300E55062 /* CameraFrameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFrameManager.swift; sourceTree = "<group>"; };
 		2E2124BB2C7A0DE800E55062 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		2E2124BE2C7A0EB400E55062 /* CGImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+.swift"; sourceTree = "<group>"; };
 		2E2B4D302C7C6B0E0090EC8B /* FaceDetectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionView.swift; sourceTree = "<group>"; };
@@ -112,7 +112,7 @@
 			children = (
 				2E2124B62C79FFB300E55062 /* CameraError.swift */,
 				2E2124B42C79FE6900E55062 /* CameraManager.swift */,
-				2E2124B82C7A0BF300E55062 /* FrameManager.swift */,
+				2E2124B82C7A0BF300E55062 /* CameraFrameManager.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -215,7 +215,7 @@
 				2E2124B12C79FBB500E55062 /* FrameView.swift in Sources */,
 				2EFE2A7A2C8D733000904D1F /* PixelFormat.swift in Sources */,
 				2E2124BF2C7A0EB400E55062 /* CGImage+.swift in Sources */,
-				2E2124B92C7A0BF300E55062 /* FrameManager.swift in Sources */,
+				2E2124B92C7A0BF300E55062 /* CameraFrameManager.swift in Sources */,
 				2E2B4D312C7C6B0E0090EC8B /* FaceDetectionView.swift in Sources */,
 				2E2124B72C79FFB300E55062 /* CameraError.swift in Sources */,
 				2E9327B12C8CA55900D2E742 /* DetectionRecordItem.swift in Sources */,

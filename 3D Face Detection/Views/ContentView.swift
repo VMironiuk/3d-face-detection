@@ -48,7 +48,7 @@ struct ContentView: View {
   ContentView(
     viewModel: ContentViewModel(
       cameraManager: CameraManager(),
-      cameraFrameManager: FrameManager()
+      cameraFrameManager: CameraFrameManager()
     )
   )
 }

@@ -26,25 +26,25 @@ final class ContentViewModel: ObservableObject {
     autoreleaseFrequency: .workItem
   )
   
-  private let frameManager: FrameManager
+  private let cameraFrameManager: CameraFrameManager
   private let cameraManager: CameraManager
   
-  init(cameraManager: CameraManager, cameraFrameManager: FrameManager) {
+  init(cameraManager: CameraManager, cameraFrameManager: CameraFrameManager) {
     self.cameraManager = cameraManager
-    self.frameManager = cameraFrameManager
+    self.cameraFrameManager = cameraFrameManager
     
-    self.cameraManager.set(videoDelegate: self.frameManager, queue: videoOutputQueue)
-    self.cameraManager.set(depthDelegate: self.frameManager, queue: videoOutputQueue)
+    self.cameraManager.set(videoDelegate: self.cameraFrameManager, queue: videoOutputQueue)
+    self.cameraManager.set(depthDelegate: self.cameraFrameManager, queue: videoOutputQueue)
     
     setupSubscriptions()
   }
   
   func useDisparity() {
-    frameManager.useDisparity(true)
+    cameraFrameManager.useDisparity(true)
   }
   
   func useDepth() {
-    frameManager.useDisparity(false)
+    cameraFrameManager.useDisparity(false)
   }
   
   func switchCamera() {
@@ -53,41 +53,41 @@ final class ContentViewModel: ObservableObject {
   }
   
   private func setupSubscriptions() {
-    frameManager.$currentFrame
+    cameraFrameManager.$currentFrame
       .receive(on: RunLoop.main)
       .compactMap { buffer in
         CGImage.create(from: buffer)
       }
       .assign(to: &$frame)
 
-    frameManager.$depthFrame
+    cameraFrameManager.$depthFrame
       .receive(on: RunLoop.main)
       .compactMap { buffer in
         CGImage.create(fromDepthDataMap: buffer)
       }
       .assign(to: &$depthFrame)
     
-    frameManager.$isFaceDetected
+    cameraFrameManager.$isFaceDetected
       .receive(on: RunLoop.main)
       .assign(to: &$faceDetected)
     
-    frameManager.$depth
+    cameraFrameManager.$depth
       .receive(on: RunLoop.main)
       .assign(to: &$depth)
     
-    frameManager.$faceBoxX
+    cameraFrameManager.$faceBoxX
       .receive(on: RunLoop.main)
       .assign(to: &$faceBoxX)
 
-    frameManager.$faceBoxY
+    cameraFrameManager.$faceBoxY
       .receive(on: RunLoop.main)
       .assign(to: &$faceBoxY)
 
-    frameManager.$faceBoxWidth
+    cameraFrameManager.$faceBoxWidth
       .receive(on: RunLoop.main)
       .assign(to: &$faceBoxWidth)
 
-    frameManager.$faceBoxHeight
+    cameraFrameManager.$faceBoxHeight
       .receive(on: RunLoop.main)
       .assign(to: &$faceBoxHeight)
 

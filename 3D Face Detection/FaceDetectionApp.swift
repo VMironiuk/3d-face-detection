@@ -21,7 +21,7 @@ private enum ContentViewComposer {
     ContentView(
       viewModel: ContentViewModel(
         cameraManager: CameraManager(),
-        cameraFrameManager: FrameManager()
+        cameraFrameManager: CameraFrameManager()
       )
     )
   }

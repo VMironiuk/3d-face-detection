@@ -1,5 +1,5 @@
 //
-//  FrameManager.swift
+//  CameraFrameManager.swift
 //  3D Face Detection
 //
 //  Created by Volodymyr Myroniuk on 24.08.2024.
@@ -8,7 +8,7 @@
 import AVFoundation
 import Vision
 
-final class FrameManager: NSObject, ObservableObject {
+final class CameraFrameManager: NSObject, ObservableObject {
   private let sequenceHandler = VNSequenceRequestHandler()
   private var isAnyFaceDetected = false
   private var framesCount = 0
@@ -48,7 +48,7 @@ final class FrameManager: NSObject, ObservableObject {
   }
 }
 
-extension FrameManager: AVCaptureVideoDataOutputSampleBufferDelegate {
+extension CameraFrameManager: AVCaptureVideoDataOutputSampleBufferDelegate {
   func captureOutput(
     _ output: AVCaptureOutput,
     didOutput sampleBuffer: CMSampleBuffer,
@@ -76,7 +76,7 @@ extension FrameManager: AVCaptureVideoDataOutputSampleBufferDelegate {
   }
 }
 
-extension FrameManager: AVCaptureDepthDataOutputDelegate {
+extension CameraFrameManager: AVCaptureDepthDataOutputDelegate {
   func depthDataOutput(
     _ output: AVCaptureDepthDataOutput,
     didOutput depthData: AVDepthData,
