@@ -15,8 +15,6 @@ final class CameraManager: ObservableObject {
     case failed
   }
   
-  static let shared = CameraManager()
-  
   @Published private(set) var error: CameraError?
   
   private let sessionQueue = DispatchQueue(label: "com.vmyroniuk.SessionQueue")
@@ -26,7 +24,7 @@ final class CameraManager: ObservableObject {
   private var status = Status.unconfigured
   private var cameraType = CameraType.front
   
-  private init() {
+   init() {
     configure()
   }
   

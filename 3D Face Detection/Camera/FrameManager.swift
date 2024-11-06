@@ -9,8 +9,6 @@ import AVFoundation
 import Vision
 
 final class FrameManager: NSObject, ObservableObject {
-  static let shared = FrameManager()
-  
   private let sequenceHandler = VNSequenceRequestHandler()
   private var isAnyFaceDetected = false
   private var framesCount = 0
@@ -27,21 +25,12 @@ final class FrameManager: NSObject, ObservableObject {
   
   private var faceBoundingBox: CGRect = .zero
     
-  private let videoOutputQueue = DispatchQueue(
-    label: "com.vmyroniuk.VideoOutputQueue",
-    qos: .userInitiated,
-    attributes: [],
-    autoreleaseFrequency: .workItem
-  )
-  
   func useDisparity(_ useDisparity: Bool) {
     self.useDisparity = useDisparity
   }
   
-  private override init() {
+  override init() {
     super.init()
-    CameraManager.shared.set(videoDelegate: self, queue: videoOutputQueue)
-    CameraManager.shared.set(depthDelegate: self, queue: videoOutputQueue)
   }
   
   private func detectedFace(request: VNRequest, error: Error?) {

@@ -19,10 +19,23 @@ final class ContentViewModel: ObservableObject {
   @Published private(set) var faceBoxWidth = DetectionRecordItem(type: .boxWidth, value: 0.0)
   @Published private(set) var faceBoxHeight = DetectionRecordItem(type: .boxHeight, value: 0.0)
   
-  private let frameManager = FrameManager.shared
-  private let cameraManager = CameraManager.shared
+  private let videoOutputQueue = DispatchQueue(
+    label: "com.intellicheck.FaceCheck.VideoOutputQueue",
+    qos: .userInitiated,
+    attributes: [],
+    autoreleaseFrequency: .workItem
+  )
   
-  init() {
+  private let frameManager: FrameManager
+  private let cameraManager: CameraManager
+  
+  init(cameraManager: CameraManager, cameraFrameManager: FrameManager) {
+    self.cameraManager = cameraManager
+    self.frameManager = cameraFrameManager
+    
+    self.cameraManager.set(videoDelegate: self.frameManager, queue: videoOutputQueue)
+    self.cameraManager.set(depthDelegate: self.frameManager, queue: videoOutputQueue)
+    
     setupSubscriptions()
   }
   

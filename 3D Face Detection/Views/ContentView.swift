@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-  @StateObject private var viewModel = ContentViewModel()
+  @ObservedObject var viewModel: ContentViewModel
   @State private var pixelFormat: PixelFormat = .depth
   
   var body: some View {
@@ -45,5 +45,10 @@ struct ContentView: View {
 }
 
 #Preview {
-  ContentView()
+  ContentView(
+    viewModel: ContentViewModel(
+      cameraManager: CameraManager(),
+      cameraFrameManager: FrameManager()
+    )
+  )
 }

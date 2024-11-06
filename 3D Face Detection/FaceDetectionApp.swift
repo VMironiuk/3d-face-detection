@@ -11,7 +11,18 @@ import SwiftUI
 struct FaceDetectionApp: App {
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      ContentViewComposer.contentView
     }
+  }
+}
+
+private enum ContentViewComposer {
+  static var contentView: some View {
+    ContentView(
+      viewModel: ContentViewModel(
+        cameraManager: CameraManager(),
+        cameraFrameManager: FrameManager()
+      )
+    )
   }
 }
