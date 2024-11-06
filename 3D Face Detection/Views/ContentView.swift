@@ -23,7 +23,10 @@ struct ContentView: View {
         faceBoxY: viewModel.faceBoxY,
         faceBoxWidth: viewModel.faceBoxWidth,
         faceBoxHeight: viewModel.faceBoxHeight,
-        image: viewModel.depthFrame
+        image: viewModel.depthFrame,
+        onSwitchCameraButtonTapped: {
+          viewModel.switchCamera()
+        }
       )
       
       FaceDetectionView(isFaceDetected: viewModel.faceDetected)

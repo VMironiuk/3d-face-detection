@@ -16,6 +16,7 @@ struct DetectionInfoView: View {
   var faceBoxWidth: DetectionRecordItem
   var faceBoxHeight: DetectionRecordItem
   var image: CGImage?
+  var onSwitchCameraButtonTapped: () -> Void
   
   var body: some View {
     VStack {
@@ -41,6 +42,11 @@ struct DetectionInfoView: View {
           .padding(8)
       }
       Spacer()
+      Button("Switch Camera") {
+        onSwitchCameraButtonTapped()
+      }
+      .buttonStyle(.borderedProminent)
+      .padding(20)
       Picker("", selection: $pixelFormat) {
         ForEach(PixelFormat.allCases) { format in
           Text(format.rawValue.uppercased())
@@ -75,7 +81,8 @@ private struct RecordView: View {
     faceBoxX: DetectionRecordItem(type: .boxX, value: 1.23456),
     faceBoxY: DetectionRecordItem(type: .boxY, value: 1.23456),
     faceBoxWidth: DetectionRecordItem(type: .boxWidth, value: 1.23456),
-    faceBoxHeight: DetectionRecordItem(type: .boxHeight, value: 1.23456)
+    faceBoxHeight: DetectionRecordItem(type: .boxHeight, value: 1.23456),
+    onSwitchCameraButtonTapped: {}
   )
 }
 

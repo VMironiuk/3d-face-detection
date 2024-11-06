@@ -34,6 +34,11 @@ final class ContentViewModel: ObservableObject {
     frameManager.useDisparity(false)
   }
   
+  func switchCamera() {
+    reset()
+    cameraManager.switchCamera()
+  }
+  
   private func setupSubscriptions() {
     frameManager.$currentFrame
       .receive(on: RunLoop.main)
@@ -77,5 +82,14 @@ final class ContentViewModel: ObservableObject {
       .receive(on: RunLoop.main)
       .map { $0 }
       .assign(to: &$error)
+  }
+  
+  private func reset() {
+    faceDetected = false
+    depth = DetectionRecordItem(type: .depth, value: 0.0)
+    faceBoxX = DetectionRecordItem(type: .boxX, value: 0.0)
+    faceBoxY = DetectionRecordItem(type: .boxY, value: 0.0)
+    faceBoxWidth = DetectionRecordItem(type: .boxWidth, value: 0.0)
+    faceBoxHeight = DetectionRecordItem(type: .boxHeight, value: 0.0)
   }
 }
