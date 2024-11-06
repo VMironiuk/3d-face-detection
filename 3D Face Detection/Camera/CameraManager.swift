@@ -7,7 +7,7 @@
 
 import AVFoundation
 
-final class CameraManager: ObservableObject {
+final class CameraManager: ObservableObject, @unchecked Sendable {
   enum Status {
     case unconfigured
     case configured

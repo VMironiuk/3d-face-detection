@@ -8,7 +8,7 @@
 import AVFoundation
 import Vision
 
-final class CameraFrameManager: NSObject, ObservableObject {
+final class CameraFrameManager: NSObject, ObservableObject, @unchecked Sendable {
   private let sequenceHandler = VNSequenceRequestHandler()
   private var isAnyFaceDetected = false
   private var framesCount = 0
@@ -59,9 +59,7 @@ extension CameraFrameManager: AVCaptureVideoDataOutputSampleBufferDelegate {
       return
     }
     
-    DispatchQueue.main.async {
-      self.currentFrame = imageBuffer
-    }
+    currentFrame = imageBuffer
     
     let detectFaceRequest = VNDetectFaceRectanglesRequest(completionHandler: detectedFace)
     do {
@@ -89,10 +87,7 @@ extension CameraFrameManager: AVCaptureDepthDataOutputDelegate {
       : kCVPixelFormatType_DepthFloat32
     )
     let depthDataMap = depthData.depthDataMap
-    
-    DispatchQueue.main.async { [weak self] in
-      self?.depthFrame = depthDataMap
-    }
+    depthFrame = depthDataMap
 
     guard isAnyFaceDetected else {
       isFaceDetected = false
