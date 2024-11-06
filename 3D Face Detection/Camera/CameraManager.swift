@@ -47,7 +47,7 @@ final class CameraManager: ObservableObject, @unchecked Sendable {
     do {
       try setupCamera(for: cameraType)
     } catch {
-      set(error: error as? CameraError)
+      set(error: error)
       status = .failed
     }
   }
@@ -74,7 +74,7 @@ private extension CameraManager {
     do {
       try setupCamera(for: cameraType)
     } catch {
-      set(error: error as? CameraError)
+      set(error: error)
       status = .failed
       return
     }
@@ -140,14 +140,14 @@ private extension CameraManager {
     }
   }
   
-  private func setupCamera(for cameraType: CameraType) throws {
+  private func setupCamera(for cameraType: CameraType) throws(CameraError) {
     let sessionWasRunning = session.isRunning
     if sessionWasRunning { session.stopRunning() }
     session.beginConfiguration()
     
     let device = cameraType.captureDevice
     guard let camera = device else {
-      throw CameraError.cameraUnavailable
+      throw .cameraUnavailable
     }
 
     session.inputs.forEach { session.removeInput($0) }
@@ -159,7 +159,7 @@ private extension CameraManager {
         throw CameraError.cameraUnavailable
       }
     } catch {
-      throw CameraError.createCaptureInput(error)
+      throw .createCaptureInput(error)
     }
     
     setupConnections(for: cameraType)
